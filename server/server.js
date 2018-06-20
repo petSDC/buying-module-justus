@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('../database/database');
+const db = require('../database/postgreSQL');
 const path = require('path');
 
 const app = express();
@@ -28,4 +28,19 @@ app.get('/:id/details', (req, res) => {
       res.json(result);
     }
   });
+});
+
+app.post('/:id/details', (req, res) => {
+  console.log('post');
+  res.send('post succeeded');
+});
+
+app.put('/:id/details', (req, res) => {
+  console.log('put');
+  res.send('put succeeded');
+});
+
+app.delete('/:id/details', (req, res) => {
+  console.log('delete');
+  res.send('delete succeeded');
 });
