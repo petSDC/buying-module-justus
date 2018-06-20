@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('../database/postgreSQL');
+// const db = require('../database/mongoDatabase');
+// const db = require('../database/postgreSQL');
+const db = require('../database/cassandra');
 const path = require('path');
 
 const app = express();
@@ -22,8 +24,8 @@ app.listen(port, () => console.log(`Buying module listening on port ${port}!`));
 app.get('/:id/details', (req, res) => {
   db.retrieve(req.params.id, (err, result) => {
     if (err) {
+      console.error(err);
       res.sendStatus(500);
-      throw err;
     } else {
       res.json(result);
     }
@@ -31,8 +33,14 @@ app.get('/:id/details', (req, res) => {
 });
 
 app.post('/:id/details', (req, res) => {
-  console.log('post');
-  res.send('post succeeded');
+  db.insertData((err) => {
+    if (err) {
+      res.sendStatus(500);
+      throw err;
+    } else {
+      res.send('inserted data');
+    }
+  });
 });
 
 app.put('/:id/details', (req, res) => {
