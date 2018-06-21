@@ -53,10 +53,18 @@ const updateQuantity = (params, callback) => {
     .catch(error => callback(error));
 };
 
+const deleteProduct = (params, callback) => {
+  const query = `DELETE FROM products WHERE id = ${params.id} AND name = '${params.name}'`;
+  client.execute(query)
+    .then(result => callback(null, result))
+    .catch(error => callback(error));
+};
+
 module.exports = {
   retrieve,
   insertData,
   updateQuantity,
+  deleteProduct,
 };
 
 

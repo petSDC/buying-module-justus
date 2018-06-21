@@ -58,6 +58,15 @@ app.put('/:id/details', (req, res) => {
 });
 
 app.delete('/:id/details', (req, res) => {
-  console.log('delete');
-  res.send('delete succeeded');
+  const params = {
+    id: 15,
+    name: 'Intelligent Plastic Fish',
+  };
+  db.deleteProduct(params, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      res.send('deleted product');
+    }
+  });
 });
