@@ -43,8 +43,18 @@ app.post('/:id/details', (req, res) => {
 });
 
 app.put('/:id/details', (req, res) => {
-  console.log('put');
-  res.send('put succeeded');
+  const params = {
+    id: 10,
+    name: 'Incredible Concrete Salad',
+    quantity: 3,
+  };
+  db.updateQuantity(params, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      res.send('updated quantity');
+    }
+  });
 });
 
 app.delete('/:id/details', (req, res) => {

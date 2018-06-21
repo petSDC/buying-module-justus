@@ -65,8 +65,8 @@ class BuyingModule extends React.Component {
           shippingMin: response.data.rows[0].shippingmin,
           shippingMax: response.data.rows[0].shippingmax,
           shopLocation: response.data.rows[0].shoplocation,
-          currentCountry: response.data.rows[0].shippingcountries,
-          currentShippingPrice: response.data.rows[0].shippingprice,
+          currentCountry: response.data.rows[0].shippingcountries[0],
+          currentShippingPrice: response.data.rows[0].shippingprice[0],
         });
       })
       .catch(error => console.error('Error in getting product data: ', error));
