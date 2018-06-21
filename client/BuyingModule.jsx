@@ -42,30 +42,31 @@ class BuyingModule extends React.Component {
   componentDidMount() {
     axios.get(`${window.location.pathname}details`)
       .then((response) => {
+        console.log(response)
         this.setState({
-          favoritedBy: response.data[0].favoritedBy,
-          feedback: response.data[0].feedback,
-          freeShipping: response.data[0].freeShipping,
-          giftCard: response.data[0].giftCard,
-          giftMessage: response.data[0].giftMessage,
-          handmade: response.data[0].handmade,
-          id: response.data[0].id,
-          madeToOrder: response.data[0].madeToOrder,
-          materials: response.data[0].materials,
-          name: response.data[0].name,
+          favoritedBy: response.data.rows[0].favoritedby,
+          feedback: response.data.rows[0].feedback,
+          freeShipping: response.data.rows[0].freeshipping,
+          giftCard: response.data.rows[0].giftcard,
+          giftMessage: response.data.rows[0].giftmessage,
+          handmade: response.data.rows[0].handmade,
+          id: response.data.rows[0].id,
+          madeToOrder: response.data.rows[0].madetooorder,
+          materials: response.data.rows[0].materials,
+          name: response.data.rows[0].name,
           options: {
-            name: response.data[0].options.name,
-            differentOptions: response.data[0].options.differentOptions,
-            price: response.data[0].options.price,
+            name: response.data.rows[0].optionsname,
+            differentOptions: response.data.rows[0].differentoptions,
+            price: response.data.rows[0].price,
           },
-          quantity: response.data[0].quantity,
-          shippingCountries: response.data[0].shippingCountries,
-          shippingPrice: response.data[0].shippingPrice,
-          shippingMin: response.data[0].shippingMin,
-          shippingMax: response.data[0].shippingMax,
-          shopLocation: response.data[0].shopLocation,
-          currentCountry: response.data[0].shippingCountries[0],
-          currentShippingPrice: response.data[0].shippingPrice[0],
+          quantity: response.data.rows[0].quantity,
+          shippingCountries: response.data.rows[0].shippingcountries,
+          shippingPrice: response.data.rows[0].shippingprice,
+          shippingMin: response.data.rows[0].shippingmin,
+          shippingMax: response.data.rows[0].shippingmax,
+          shopLocation: response.data.rows[0].shoplocation,
+          currentCountry: response.data.rows[0].shippingcountries,
+          currentShippingPrice: response.data.rows[0].shippingprice,
         });
       })
       .catch(error => console.error('Error in getting product data: ', error));
