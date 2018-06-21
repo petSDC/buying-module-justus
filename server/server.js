@@ -35,8 +35,7 @@ app.get('/:id/details', (req, res) => {
 app.post('/:id/details', (req, res) => {
   db.insertData((err) => {
     if (err) {
-      res.sendStatus(500);
-      throw err;
+      console.error(err);
     } else {
       res.send('inserted data');
     }
