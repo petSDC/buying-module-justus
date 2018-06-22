@@ -3,6 +3,9 @@ CREATE TABLE IF NOT EXISTS products (
   id SERIAL PRIMARY KEY,
   product_name VARCHAR(300),
   free_shipping BOOLEAN,
+  option_name text,
+  different_options VARCHAR(50)[],
+  price numeric(2)[],
   quantity integer,
   handmade BOOLEAN,
   made_to_order BOOLEAN,
@@ -37,16 +40,18 @@ CREATE TABLE IF NOT EXISTS countries(
   shipping_multiplier integer
 );
 
-CREATE TABLE IF NOT EXISTS counteries_shipping (
+CREATE TABLE IF NOT EXISTS countries_shipping (
   id SERIAL PRIMARY KEY,
   product_id integer REFERENCES products (id),
   country_id integer REFERENCES countries (id)
 );
 
-INSERT INTO products (product_name) VALUES ('name');
-INSERT INTO products (product_name) VALUES ('name');
-INSERT INTO products (product_name) VALUES ('name');
-INSERT INTO products (product_name) VALUES ('name');
-INSERT INTO products (product_name) VALUES ('name');
-INSERT INTO products (product_name) VALUES ('name');
-INSERT INTO products (product_name) VALUES ('name');
+select products.*, feedback.product_id, users.products_favorited, countries.* 
+from products, feedback, users, countries
+where product.id = 8000000
+and feedback.product_id = 8000000
+and countries.id = countries_shipping.country_id
+and countries_shipping.product_id = 8000000
+and favorited_by_users.product_id = 8000000
+and users.id = favorited_by_users.user_id
+and 

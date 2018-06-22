@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 // const db = require('../database/mongoDatabase');
-// const db = require('../database/postgreSQL');
-const db = require('../database/cassandra');
+const db = require('../database/postgreSQL');
+// const db = require('../database/cassandra');
 const path = require('path');
 
 const app = express();
@@ -38,6 +38,16 @@ app.post('/:id/details', (req, res) => {
       console.error(err);
     } else {
       res.send('inserted data');
+    }
+  });
+});
+
+app.post('/:id/users', (req, res) => {
+  db.updateCart((err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      res.send('updated user cart');
     }
   });
 });

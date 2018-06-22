@@ -36,10 +36,10 @@ const insertData = (callback, counter) => {
   }
   Promise.all(promises)
     .then((result) => {
-      if (counter === 50) {
+      if (counter === 5000) {
         callback(null, result);
       } else {
-        console.log(keepCount)
+        console.log(keepCount);
         insertData(callback, keepCount + 1);
       }
     })
