@@ -26,8 +26,11 @@ client.connect((err) => {
   }
 });
 
+//(select count(users.products_favorited as countUsers) from users)
+
 const retrieve = (params, callback) => {
-  const queryStr = `SELECT * FROM products where id = ${params.id}`;
+  //const queryStr = `select countries.*, products.*, (select count(product_id) from feedback where feedback.product_id = ${params}) as feedbackCount, (select count(users.products_favorited) from products left join favorited_by_users on products.id = favorited_by_users.product_id left join users on favorited_by_users.user_id = users.id where products.id = ${params}) as usersCount from products left join countries_shipping on products.id = countries_shipping.product_id left join countries on countries_shipping.country_id = countries.id where products.id = ${params}`;
+  const queryStr = `select selectall(${params})`;
   client.query(queryStr, (err, results) => {
     if (err) {
       callback(err, null);
@@ -105,9 +108,48 @@ const favoriteUsers = {
 //     .then(result => callback(null, result))
 //     .catch(error => callback(error, null));
 // };
+const insertData3 = (callback, counter) => {
+  const keepCount = counter || 0;
+  const querys = [];
+  for (let i = 1000 * keepCount; i < 1000 + (1000 * keepCount); i += 1) {
+    querys.push({
+      product_id: fake.random.number({ min: 1, max: 10000000 }),
+      user_id: fake.random.number({ min: 1, max: 100000000 }),
+    });
+  }
+  knex.batchInsert('favorited_by_users', querys, 1000)
+    .then((result) => {
+      if (counter === 100000) {
+        callback(null, result);
+      } else {
+        console.log(keepCount, 'usersFavorited');
+        insertData3(callback, keepCount + 1);
+      }
+    })
+    .catch(error => callback(error, null));
+};
 
+const insertData2 = (callback, counter) => {
+  const keepCount = counter || 0;
+  const querys = [];
+  for (let i = 1000 * keepCount; i < 1000 + (1000 * keepCount); i += 1) {
+    querys.push({
+      products_favorited: fake.random.number({ min: 1, max: 10 }),
+    });
+  }
+  knex.batchInsert('users', querys, 1000)
+    .then((result) => {
+      if (counter === 100000) {
+        insertData3(callback, 0);
+      } else {
+        console.log(keepCount, 'users');
+        insertData2(callback, keepCount + 1);
+      }
+    })
+    .catch(error => callback(error, null));
+};
 
-const insertData = (callback, counter) => {
+const insertData1 = (callback, counter) => {
   const keepCount = counter || 0;
   const querys = [];
   for (let i = 1000 * keepCount; i < 1000 + (1000 * keepCount); i += 1) {
@@ -119,17 +161,52 @@ const insertData = (callback, counter) => {
   knex.batchInsert('countries_shipping', querys, 1000)
     .then((result) => {
       if (counter === 10000) {
-        callback(null, result);
+        insertData2(callback, 0);
       } else {
-        console.log(keepCount);
+        console.log(keepCount, 'countriesShipping');
+        insertData1(callback, keepCount + 1);
+      }
+    })
+    .catch(error => callback(error, null));
+};
+
+const insertData = (callback, counter) => {
+  const keepCount = counter || 0;
+  const querys = [];
+  for (let i = 1000 * keepCount; i < 1000 + (1000 * keepCount); i += 1) {
+    querys.push({
+      product_id: fake.random.number(10000000),
+    });
+  }
+  knex.batchInsert('feedback', querys, 1000)
+    .then((result) => {
+      if (counter === 100000) {
+        insertData1(callback, 0);
+      } else {
+        console.log(keepCount, 'feedback');
         insertData(callback, keepCount + 1);
       }
     })
     .catch(error => callback(error, null));
 };
 
+const updateQuantity = (params, callback) => {
+  const queryStr = `UPDATE products SET quantity = ${params.quantity - 1} WHERE id = ${params.id}`;
+  client.query(queryStr)
+    .then(result => callback(null, result))
+    .catch(error => callback(error));
+};
+
+const deleteProduct = (params, callback) => {
+  const queryStr = `DELETE FROM products WHERE id = ${params.id}'`;
+  client.query(queryStr)
+    .then(result => callback(null, result))
+    .catch(error => callback(error));
+};
 
 module.exports = {
   retrieve,
   insertData,
+  updateQuantity,
+  deleteProduct,
 };

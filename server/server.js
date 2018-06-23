@@ -54,7 +54,7 @@ app.post('/:id/users', (req, res) => {
 
 app.put('/:id/details', (req, res) => {
   const params = {
-    id: 10,
+    id: 1000000,
     name: 'Incredible Concrete Salad',
     quantity: 3,
   };
@@ -69,7 +69,7 @@ app.put('/:id/details', (req, res) => {
 
 app.delete('/:id/details', (req, res) => {
   const params = {
-    id: 15,
+    id: 1090,
     name: 'Intelligent Plastic Fish',
   };
   db.deleteProduct(params, (err) => {

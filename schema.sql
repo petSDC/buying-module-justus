@@ -46,12 +46,128 @@ CREATE TABLE IF NOT EXISTS countries_shipping (
   country_id integer REFERENCES countries (id)
 );
 
-select products.*, feedback.product_id, users.products_favorited, countries.* 
-from products, feedback, users, countries
-where product.id = 8000000
-and feedback.product_id = 8000000
-and countries.id = countries_shipping.country_id
-and countries_shipping.product_id = 8000000
-and favorited_by_users.product_id = 8000000
-and users.id = favorited_by_users.user_id
-and 
+create index country_products on countries_shipping (product_id);
+create index feedback_products on feedback (product_id);
+create index favorite_products on favorited_by_users (product_id);
+create index favorite_users on favorited_by_users (user_id);
+
+CREATE PROCEDURE selectAll(IN params int)) 
+select countries.*, products.*,
+(select count(product_id) from feedback
+where feedback.product_id = params) as feedbackCount,
+(select count(users.products_favorited) from products
+left join favorited_by_users
+on products.id = favorited_by_users.product_id
+left join users
+on favorited_by_users.user_id = users.id
+where products.id = params) as usersCount
+from products 
+left join countries_shipping
+on products.id = countries_shipping.product_id
+left join countries
+on countries_shipping.country_id = countries.id
+where products.id = params;
+
+CALL GetEmployees('Finance');
+
+-- copy countries_shipping (product_id, country_id) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/countriesShipping.txt' (delimiter(','));
+-- copy users (products_favorited) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/users1.txt' (delimiter(','));
+-- copy feedback (product_id) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/feedback1.txt' (delimiter(','));
+-- copy favorited_by_users (user_id, product_id) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/favorited_by_users1.txt' (delimiter(','));
+
+CREATE OR REPLACE FUNCTION selectAll(params int)
+  RETURNS Table(
+  country_name VARCHAR(100),
+  shipping_multiplier integer,
+  id int,
+  product_name VARCHAR(300),
+  free_shipping BOOLEAN,
+  option_name text,
+  different_options VARCHAR(50)[],
+  price numeric(2)[],
+  quantity integer,
+  handmade BOOLEAN,
+  made_to_order BOOLEAN,
+  materials VARCHAR(200),
+  gift_message BOOLEAN,
+  gift_card BOOLEAN,
+  shipping_min_days SMALLINT,
+  shipping_max_days SMALLINT,
+  shop_location VARCHAR(100),
+  shipping_price SMALLINT,
+  feedbackCount bigint,
+  usersCount bigint
+  ) AS
+$func$
+BEGIN
+   RETURN QUERY EXECUTE
+select
+  countries.country_name,
+  countries.shipping_multiplier,
+  products.*,
+  (
+    select
+      count(product_id)
+    from
+      feedback
+    where
+      feedback.product_id = params
+  ) as feedbackCount,
+  (
+    select
+      count(users.products_favorited)
+    from
+      products
+      left join favorited_by_users on products.id = favorited_by_users.product_id
+      left join users on favorited_by_users.user_id = users.id
+    where
+      products.id = params
+  ) as usersCount
+from
+  products
+  left join countries_shipping on products.id = countries_shipping.product_id
+  left join countries on countries_shipping.country_id = countries.id
+where
+  products.id = params;
+END
+$func$  LANGUAGE plpgsql;
+
+
+CREATE FUNCTION getall1(params int)
+  RETURNS void AS
+  $$
+      BEGIN
+select countries.country_name, countries.shipping_multiplier, products.*,
+(select count(product_id) from feedback
+where feedback.product_id = 9000010) as feedbackCount,
+(select count(users.products_favorited) from products
+left join favorited_by_users
+on products.id = favorited_by_users.product_id
+left join users
+on favorited_by_users.user_id = users.id
+where products.id = 9000010) as usersCount
+from products 
+left join countries_shipping
+on products.id = countries_shipping.product_id
+left join countries
+on countries_shipping.country_id = countries.id
+where products.id = 9000010;
+      END;
+  $$
+  LANGUAGE 'plpgsql'
+  COST 100;
+
+  explain analyze select selectAll(9000011);
+
+select products.*, countries.country_name, countries.shipping_multiplier, feedback.product_id, users.favorite_products from products 
+left join countries_shipping
+on products.id = countries_shipping.product_id
+left join countries
+on countries_shipping.country_id = countries.id
+left join favorited_by_users
+on products.id = favorited_by_users.product_id
+left join users
+on favorited_by_users.user_id = users.id
+left join feedback
+on products.id = feedback.product_id
+where products.id = 9000010;

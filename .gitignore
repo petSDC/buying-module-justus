@@ -1,11 +1,14 @@
 ## MAC files ##
 .DS_Store
 countriesShipping1.txt
-countriesShipping2.txt
+countriesShipping.txt
 feedback1.txt
-feedback2.txt
+feedback.txt
 users1.txt
-users2.txt
+users3.txt
+favorited_by_users1.txt
+favorited_by_users3.txt
+
 
 ## NPM ##
 npm
