@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS products (
+CREATE TABLE IF NOT EXISTS products1 (
   id int,
   name text,
   freeShipping BOOLEAN,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS products (
   shippingMin int,
   shippingMax int,
   shopLocation text,
-  PRIMARY KEY (id, name)
+  PRIMARY KEY (id, freeShipping)
 );
 
 CREATE TABLE IF NOT EXISTS users (

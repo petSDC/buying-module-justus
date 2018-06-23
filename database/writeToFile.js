@@ -1,23 +1,23 @@
 const fs = require('fs');
 const fake = require('faker');
 
-const wStream = fs.createWriteStream('favorited_by_users3.txt');
+const wStream = fs.createWriteStream('DOC_products.txt');
 
 
 const writeToFile = (writer) => {
-  let i = 50000000;
+  let i = 10000000;
   function write() {
     let ok = true;
     do {
       i -= 1;
       if (i === 0) {
-        writer.write(`${fake.random.number({ min: 1, max: 50000000 })},${fake.random.number({ min: 1, max: 10000000 })}\n`);
+        writer.write(`'${fake.commerce.productName()}', ${fake.random.boolean()}, ${'Sizes'}, ${['4x6 inches', '5x7 inches', '8x10 inches', '11x14 inches', '12x16 inches', '13x19 inches', '16x20 inches', 'A4', 'A3', 'A2']}, ${[3.43, 5.52, 8.60, 0, 2.14, 1.39, 8.64, 0, 5.41, 0.64, 3.27, 1.52, 0, 0, 2.09, 0, 0]}, ${fake.random.number(10)}, ${fake.random.boolean()}, ${fake.random.boolean()}, ${fake.random.boolean()}, ${fake.random.boolean()}, ${fake.random.boolean()}, ${fake.random.number({ min: 0, max: 5 })}, ${fake.random.number({ min: 6, max: 10 })}, ${fake.random.number({ min: 0, max: 5 })}\n`);
         wStream.end();
       } else {
         if (i % 100000 === 0) {
           console.log(i);
         }
-        ok = writer.write(`${fake.random.number({ min: 1, max: 50000000 })},${fake.random.number({ min: 1, max: 10000000 })}\n`);
+        ok = writer.write(`${fake.random.number({ min: 1, max: 10000000 })}, ${fake.random.number(5)}\n`);
       }
     } while (i > 0 && ok);
     if (i > 0) {
@@ -57,7 +57,7 @@ const countries = {
 };
 
 const feedback = {
-  product_id: fake.random.number(10000000),
+  product_id: fake.random.number({ min: 1, max: 10000000 }),
 };
 
 const users = {

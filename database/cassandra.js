@@ -12,7 +12,7 @@ client.connect((err) => {
 });
 
 const retrieve = (params, callback) => {
-  const query = `SELECT * from products where id = ${params}`;
+  const query = `SELECT * from products where id = ${params} allow filtering`;
   client.execute(query)
     .then(result => callback(null, result))
     .catch(error => callback(error));
@@ -45,6 +45,21 @@ const insertData = (callback, counter) => {
     .catch(error => callback(error, null));
 };
 
+const addFeedback = (params, callback) => {
+  const query = `INSERT INTO petsdc_buying.products (id, name, freeShipping, optionsName, differentOptions, price, quantity, handmade, madeToOrder, materials, giftMessage, giftCard, shippingCountries, shippingPrice, feedback, favoritedBy, shippingMin, shippingMax) 
+                  VALUES(${12000000}, 'justus', ${faker.freeShipping()}, 'Sizes', 
+                    ['4x6 inches', '5x7 inches', '8x10 inches', '11x14 inches', '12x16 inches', '13x19 inches', '16x20 inches', 'A4', 'A3', 'A2'],
+                      [3.43, 5.52, 8.60, 0, 2.14, 1.39, 8.64, 0, 5.41, 0.64, 3.27, 1.52, 0, 0, 2.09, 0, 0],
+                        ${Math.floor(Math.random() * 10)}, ${faker.handmade()}, ${faker.madeToOrder()}, ${faker.materials()}, ${faker.giftMessage()}, ${faker.giftCard()},
+                          ['Australia', 'Bulgaria', 'Canada', 'Denmark', 'Finland', 'Germany', 'Iceland', 'Ireland', 'Liechtenstein', 'Luxembourg', 'Monaco', 'New Zealand', 'Norway', 'Sweden', 'Switzerland', 'United Kingdom', 'United States'],
+                          [3.43, 5.52, 8.60, 0, 2.14, 1.39, 8.64, 0, 5.41, 0.64, 3.27, 1.52, 0, 0, 2.09, 0, 0],
+                            ${faker.feedback()}, ${faker.favoritedBy()}, ${faker.shippingMin}, ${faker.shippingMax}
+                              )`;
+  client.execute(query)
+    .then(result => callback(null, result))
+    .catch(error => callback(error));
+};
+
 const updateQuantity = (params, callback) => {
   const query = `UPDATE products SET quantity = ${params.quantity - 1} WHERE id = ${params.id} AND name = '${params.name}'`;
   client.execute(query)
@@ -64,4 +79,5 @@ module.exports = {
   insertData,
   updateQuantity,
   deleteProduct,
+  addFeedback,
 };

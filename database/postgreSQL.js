@@ -3,7 +3,8 @@ const { Client } = require('pg');
 const knex = require('knex')({
   client: 'pg',
   connection: {
-    host: 'localhost',
+    host: 'database',
+    user: 'justuskovats-wildenradt',
     password: '',
     database: 'petsdc_buying',
     port: 5432,
@@ -11,7 +12,8 @@ const knex = require('knex')({
 });
 
 const client = new Client({
-  host: 'localhost',
+  host: 'database',
+  user: 'justuskovats-wildenradt',
   database: 'petsdc_buying',
   password: '',
   port: 5432,
@@ -98,6 +100,13 @@ const insertData = (callback, counter) => {
     .catch(error => callback(error, null));
 };
 
+const addFeedback = (params, callback) => {
+  const query = `INSERT INTO feedback (product_id) VALUES (${params})`;
+  client.query(query)
+    .then(result => callback(null, result))
+    .catch(error => callback(error));
+};
+
 const updateQuantity = (params, callback) => {
   const queryStr = `UPDATE products SET quantity = ${params.quantity - 1} WHERE id = ${params.id}`;
   client.query(queryStr)
@@ -117,4 +126,5 @@ module.exports = {
   insertData,
   updateQuantity,
   deleteProduct,
+  addFeedback,
 };

@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  buying:
+    build:
+      context: .
+    depends_on:
+      - database
+    ports:
+      - '8000:8000'
+
+  database:
+    image: postgres:10.4
+    restart: always
+    environment:
+      POSTGRES_USER: 'justuskovats-wildenradt'
+      POSTGRES_PASSWORD: ''
+      POSTGRES_DB: 'petsdc_buying'
+      PORT: 5432

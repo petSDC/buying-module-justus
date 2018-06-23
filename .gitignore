@@ -8,6 +8,11 @@ users1.txt
 users3.txt
 favorited_by_users1.txt
 favorited_by_users3.txt
+DOC_countries_shipping.txt
+DOC_favorited_by_users.txt
+DOC_feedback.txt
+DOC_users.txt
+DOC_products.txt
 
 
 ## NPM ##

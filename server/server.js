@@ -42,12 +42,12 @@ app.post('/:id/details', (req, res) => {
   });
 });
 
-app.post('/:id/addToCart', (req, res) => {
-  db.addToCart((err) => {
+app.post('/:id/addFeedback', (req, res) => {
+  db.addFeedback(req.params.id, (err) => {
     if (err) {
       console.error(err);
     } else {
-      res.send('addedTocart successful');
+      res.send('product added');
     }
   });
 });
