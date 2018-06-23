@@ -1,5 +1,4 @@
 const cassandra = require('cassandra-driver');
-const fake = require('faker');
 const faker = require('./fakeData');
 
 const client = new cassandra.Client({ contactPoints: ['127.0.0.1'], keyspace: 'petsdc_buying' });
@@ -66,46 +65,3 @@ module.exports = {
   updateQuantity,
   deleteProduct,
 };
-
-
-
-
-// const insertData = (callback, counter) => {
-//   const keepCount = counter || 0;
-//   const promises = [];
-//   for (let i = 2000 * keepCount; i < 2000 + (2000 * keepCount); i += 1) {
-//     const query = {
-//       name: faker.commerce.productName(),
-//       freeShipping: faker.random.boolean(),
-//       options: {
-//         name: "Sizes",
-//         differentOptions: ["4x6 inches", "5x7 inches", "8x10 inches", "11x14 inches", "12x16 inches", "13x19 inches", "16x20 inches", "A4", "A3", "A2"],
-//         price: [faker.finance.amount(),faker.finance.amount(),faker.finance.amount(),faker.finance.amount(),faker.finance.amount(),faker.finance.amount(),faker.finance.amount(),faker.finance.amount(),faker.finance.amount(),faker.finance.amount()]
-//       },
-//       quantity: faker.random.number(),
-//       handmade: faker.random.boolean(),
-//       madeToOrder: faker.random.boolean(),
-//       materials: faker.random.boolean(),
-//       giftMessage: faker.random.boolean(),
-//       giftCard: faker.random.boolean(),
-//       shippingCountries: ["Australia", "Bulgaria", "Canada", "Denmark", "Finland", "Germany", "Iceland", "Ireland", "Liechtenstein", "Luxembourg", "Monaco", "New Zealand", "Norway", "Sweden", "Switzerland", "United Kingdom", "United States"],
-//       shippingPrice: [faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount(), faker.finance.amount()],
-//       feedback: faker.random.number(),
-//       favoritedBy: faker.random.number(),
-//       shippingMin: 2,
-//       shippingMax: 9,
-//       shopLocation: faker.address.country(),
-//     };
-//     promises.push(cassanKnex().insert(query));
-//   }
-//   cassanKnex().batch(promises)
-//     .then((result) => {
-//       if (counter === 500) {
-//         callback(null, result);
-//       } else {
-//         console.log(keepCount)
-//         insertData(callback, keepCount + 1);
-//       }
-//     })
-//     .catch(error => callback(error, null));
-// };

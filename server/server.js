@@ -42,6 +42,16 @@ app.post('/:id/details', (req, res) => {
   });
 });
 
+app.post('/:id/addToCart', (req, res) => {
+  db.addToCart((err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      res.send('addedTocart successful');
+    }
+  });
+});
+
 app.post('/:id/users', (req, res) => {
   db.updateCart((err) => {
     if (err) {

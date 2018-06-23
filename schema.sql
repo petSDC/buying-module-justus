@@ -139,19 +139,19 @@ CREATE FUNCTION getall1(params int)
       BEGIN
 select countries.country_name, countries.shipping_multiplier, products.*,
 (select count(product_id) from feedback
-where feedback.product_id = 9000010) as feedbackCount,
+where feedback.product_id = 9000014) as feedbackCount,
 (select count(users.products_favorited) from products
 left join favorited_by_users
 on products.id = favorited_by_users.product_id
 left join users
 on favorited_by_users.user_id = users.id
-where products.id = 9000010) as usersCount
+where products.id = 9000014) as usersCount
 from products 
 left join countries_shipping
 on products.id = countries_shipping.product_id
 left join countries
 on countries_shipping.country_id = countries.id
-where products.id = 9000010;
+where products.id = 9000014;
       END;
   $$
   LANGUAGE 'plpgsql'
@@ -159,7 +159,7 @@ where products.id = 9000010;
 
   explain analyze select selectAll(9000011);
 
-select products.*, countries.country_name, countries.shipping_multiplier, feedback.product_id, users.favorite_products from products 
+select products.*, countries.country_name, countries.shipping_multiplier, feedback.product_id, users.id from products 
 left join countries_shipping
 on products.id = countries_shipping.product_id
 left join countries
@@ -170,4 +170,4 @@ left join users
 on favorited_by_users.user_id = users.id
 left join feedback
 on products.id = feedback.product_id
-where products.id = 9000010;
+where products.id = 9000017;
