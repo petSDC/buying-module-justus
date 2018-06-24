@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS products1 (
+CREATE TABLE IF NOT EXISTS products (
   id int,
   name text,
   freeShipping BOOLEAN,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS products1 (
   shippingMin int,
   shippingMax int,
   shopLocation text,
-  PRIMARY KEY (id, freeShipping)
+  PRIMARY KEY (id, name)
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -35,8 +35,6 @@ CREATE TABLE IF NOT EXISTS addToCart (
   price int,
   shppingCost set<int>,
 );
-
-
 
 
 -- INSERT INTO petsdc_buying.products (id, name, freeShipping, optionsName, differentOptions, price, quantity, handmade, madeToOrder, materials, giftMessage, giftCard, shippingCountries, shippingPrice, feedback, favoritedBy, shippingMin, shippingMax)
