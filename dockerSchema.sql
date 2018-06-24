@@ -3,12 +3,12 @@ CREATE TABLE IF NOT EXISTS products (
   product_name VARCHAR(300),
   free_shipping BOOLEAN,
   option_name text,
-  different_options VARCHAR(50)[],
-  price numeric(2)[],
+  different_options text,
+  price text,
   quantity integer,
   handmade BOOLEAN,
   made_to_order BOOLEAN,
-  materials VARCHAR(200),
+  materials BOOLEAN,
   gift_message BOOLEAN,
   gift_card BOOLEAN,
   shipping_min_days SMALLINT,
@@ -50,6 +50,13 @@ CREATE TABLE IF NOT EXISTS countries_shipping (
 -- copy favorited_by_users (user_id, product_id) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/DOC_favorited_by_users.txt' (delimiter(','));
 -- copy countries_shipping (product_id, country_id) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/DOC_countries_shipping.txt' (delimiter(','));
 
+-- copy products (product_name, free_shipping, option_name, different_options, price, quantity, handmade, made_to_order, materials, gift_message, gift_card, shipping_min_days, shipping_max_days, shipping_price) from '/products' (delimiter(','));
+-- copy feedback (product_id) from '/feedback' (delimiter(','));
+-- copy users (products_favorited) from '/users' (delimiter(','));
+-- copy favorited_by_users (user_id, product_id) from '/favorited' (delimiter(','));
+-- copy countries (country_name, shipping_multiplier) from '/countries' (delimiter(','));
+copy countries_shipping (product_id, country_id) from '/shipping' (delimiter(','));
+
 
 -- ALTER TABLE feedback 
 -- ADD CONSTRAINT feedback_key FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE;
@@ -63,8 +70,8 @@ CREATE TABLE IF NOT EXISTS countries_shipping (
 -- ALTER TABLE countries_shipping 
 -- ADD CONSTRAINT countries_product_key FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE;
 
--- ALTER TABLE countries_shipping 
--- ADD CONSTRAINT countries_country_key FOREIGN KEY (country_id) REFERENCES countries (id) ON DELETE CASCADE;
+ALTER TABLE countries_shipping 
+ADD CONSTRAINT countries_country_key FOREIGN KEY (country_id) REFERENCES countries (id) ON DELETE CASCADE;
 
 -- create index country_products on countries_shipping (product_id);
 -- create index feedback_products on feedback (product_id);

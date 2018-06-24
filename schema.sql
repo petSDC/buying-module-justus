@@ -171,3 +171,7 @@ on favorited_by_users.user_id = users.id
 left join feedback
 on products.id = feedback.product_id
 where products.id = 9000017;
+
+
+copy products (product_name, free_shipping, option_name, different_options, price, quantity, handmade, made_to_order, materials, gift_message, gift_card, shipping_min_days, shipping_max_days, shipping_p
+rice) from '/products' delimiter ',' csv;\quantity

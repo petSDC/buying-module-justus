@@ -18,4 +18,11 @@ services:
       POSTGRES_DB: 'petsdc_buying'
       PORT: 5432
     volumes:
-      - ./DOC_feedback.txt:/data
+      - ./1DOC_products.txt:/products
+      - ./DOC_feedback.txt:/feedback
+      - ./DOC_users.txt:/users
+      - ./DOC_favorited_by_users.txt:/favorited
+      - ./DOC_countries.txt:/countries
+      - ./DOC_countries_shipping.txt:/shipping
+      - ./docker-compose.yml:/docker-compose
+      - ./Dockerfile:/Dockerfile
