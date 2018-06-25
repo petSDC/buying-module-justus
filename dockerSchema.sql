@@ -70,8 +70,8 @@ copy countries_shipping (product_id, country_id) from '/shipping' (delimiter(','
 -- ALTER TABLE countries_shipping 
 -- ADD CONSTRAINT countries_product_key FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE;
 
-ALTER TABLE countries_shipping 
-ADD CONSTRAINT countries_country_key FOREIGN KEY (country_id) REFERENCES countries (id) ON DELETE CASCADE;
+-- ALTER TABLE countries_shipping 
+-- ADD CONSTRAINT countries_country_key FOREIGN KEY (country_id) REFERENCES countries (id) ON DELETE CASCADE;
 
 -- create index country_products on countries_shipping (product_id);
 -- create index feedback_products on feedback (product_id);

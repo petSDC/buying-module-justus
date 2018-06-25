@@ -2,27 +2,35 @@ version: '3'
 
 services:
   buying:
-    build:
-      context: .
+    image: justuskw/petsdc-swarm:test
     depends_on:
-      - database
+      - 'database'
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
     ports:
       - '8000:8000'
+    networks:
+      - webnet
 
   database:
     image: postgres:10.4
-    restart: always
     environment:
       POSTGRES_USER: 'justuskovats-wildenradt'
       POSTGRES_PASSWORD: ''
       POSTGRES_DB: 'petsdc_buying'
       PORT: 5432
     volumes:
-      - ./1DOC_products.txt:/products
-      - ./DOC_feedback.txt:/feedback
-      - ./DOC_users.txt:/users
-      - ./DOC_favorited_by_users.txt:/favorited
-      - ./DOC_countries.txt:/countries
-      - ./DOC_countries_shipping.txt:/shipping
-      - ./docker-compose.yml:/docker-compose
-      - ./Dockerfile:/Dockerfile
+      - ../data:/data
+    deploy:
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+networks:
+  webnet:
