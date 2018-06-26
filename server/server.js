@@ -24,12 +24,30 @@ app.use('/:id', express.static(path.resolve(__dirname, './../public')));
 app.listen(port, () => console.log(`Buying module listening on port ${port}!`));
 
 app.get('/:id/details', (req, res) => {
-  db.retrieve(req.params.id, (err, result) => {
-    if (err) {
-      console.error(err);
-      res.sendStatus(500);
+  redis.checkRedis(req.params.id, (reply) => {
+    if (reply === 1) {
+      redis.getProduct(req.params.id, (err, data) => {
+        if (err) {
+          res.sendStatus(500);
+        } else {
+          res.json(data);
+        }
+      });
     } else {
-      res.json(result);
+      db.retrieve(req.params.id, (err, result) => {
+        if (err) {
+          console.error(err);
+          res.sendStatus(500);
+        } else {
+          redis.storeProduct(req.params.id, result, (error, storeReply) => {
+            if (err) {
+              res.sendStatus(500);
+            } else {
+              res.json(storeReply);
+            }
+          });
+        }
+      });
     }
   });
 });

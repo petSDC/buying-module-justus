@@ -1,13 +1,32 @@
 config:
   target: 'http://localhost:8000'
+  processor: "./randomNumber.js"
   phases:
-    - duration: 400
-      arrivalRate: 500
+    - duration: 60
+      arrivalRate: 100
+    - duration: 120
+      arrivalRate: 100
+      rampTo: 300
+    - duration: 300
+      arrivalRate: 300
+      rampTo: 400
+    - duration: 300
+      arrivalRate: 400
+
   defaults:
     headers:
       x-my-service-auth: '987401838271002188298567'
 scenarios:
-  - flow:
-    - get:
-        url: "/9000001/details"
+  - name: 'top 20%'
+    weight: 80
+    flow:
+      - function: "generateRandomData"
+      - get:
+          url: "/{{ randomNumber20 }}/details"
+  - name: 'bottom 80%'
+    weight: 20
+    flow:
+      - function: "generateRandomData"
+      - get:
+          url: "/{{ randomNumber80 }}/details"
 
