@@ -1,7 +1,9 @@
+require('newrelic');
 const express = require('express');
 const bodyParser = require('body-parser');
 // const db = require('../database/mongoDatabase');
 const db = require('../database/postgreSQL');
+const redis = require('../database/redis');
 // const db = require('../database/cassandra');
 const path = require('path');
 

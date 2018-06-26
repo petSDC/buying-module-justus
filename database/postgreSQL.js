@@ -3,8 +3,8 @@ const { Client } = require('pg');
 const knex = require('knex')({
   client: 'pg',
   connection: {
-    host: 'database',
-    user: 'justuskovats-wildenradt',
+    host: 'localhost',
+    // user: 'justuskovats-wildenradt',
     password: '',
     database: 'petsdc_buying',
     port: 5432,
@@ -12,8 +12,8 @@ const knex = require('knex')({
 });
 
 const client = new Client({
-  host: 'database',
-  user: 'justuskovats-wildenradt',
+  host: 'localhost',
+  // user: 'justuskovats-wildenradt',
   database: 'petsdc_buying',
   password: '',
   port: 5432,
