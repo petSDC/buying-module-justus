@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: buying
+spec:
+  replicas: 2
+  minReadySeconds: 15
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: buying
+    spec:
+      containers:
+        - image: justuskw/petsdc-swarm:test
+          imagePullPolicy: Always
+          name: buying
+          ports:
+            - containerPort: 8000

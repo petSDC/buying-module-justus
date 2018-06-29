@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  ports:
+    - port:5432
+  selector:
+    app: postgres
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - image: "postgres:9.6.2"
+          name: postgres
+          env:
+            - name: POSTGRES_USER
+              value: justuskovats-wildenradt
+            - name: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              value: petsdc_buying
+          ports:
+            - containerPort: 5432
+              name: postgres

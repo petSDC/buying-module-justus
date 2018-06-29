@@ -1,25 +1,26 @@
 const fake = require('faker');
-const { Client } = require('pg');
-const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host: 'localhost',
-    // user: 'justuskovats-wildenradt',
-    password: '',
-    database: 'petsdc_buying',
-    port: 5432,
-  },
-});
+const { Pool } = require('pg');
+// const knex = require('knex')({
+//   client: 'pg',
+//   connection: {
+//     host: 'localhost',
+//     // user: 'justuskovats-wildenradt',
+//     password: '',
+//     database: 'petsdc_buying',
+//     port: 5432,
+//   },
+// });
 
-const client = new Client({
+const pool = new Pool({
   host: 'localhost',
-  // user: 'justuskovats-wildenradt',
+  user: 'justuskovats-wildenradt',
+  max: 300,
   database: 'petsdc_buying',
   password: '',
   port: 5432,
 });
 
-client.connect((err) => {
+pool.connect((err) => {
   if (err) {
     console.error('failed to connect to postgres');
   } else {
@@ -58,12 +59,16 @@ const retrieve = (params, callback) => {
       LEFT JOIN countries on countries_shipping.country_id = countries.id
     WHERE
       products.id = ${params}`;
-  client.query(queryStr, (err, results) => {
-    if (err) {
-      callback(err, null);
-    } else {
-      callback(null, results);
-    }
+  pool.connect((err, client, release) => {
+    if (err) throw err;
+    client.query(queryStr, (error, res) => {
+      release();
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, res);
+      }
+    });
   });
 };
 
@@ -101,24 +106,48 @@ const insertData = (callback, counter) => {
 };
 
 const addFeedback = (params, callback) => {
-  const query = `INSERT INTO feedback (product_id) VALUES (${params})`;
-  client.query(query)
-    .then(result => callback(null, result))
-    .catch(error => callback(error));
+  const queryStr = `INSERT INTO feedback (product_id) VALUES (${params})`;
+  pool.connect((err, client, release) => {
+    if (err) throw err;
+    client.query(queryStr, (error, res) => {
+      release();
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, res);
+      }
+    });
+  });
 };
 
 const updateQuantity = (params, callback) => {
   const queryStr = `UPDATE products SET quantity = ${params.quantity - 1} WHERE id = ${params.id}`;
-  client.query(queryStr)
-    .then(result => callback(null, result))
-    .catch(error => callback(error));
+  pool.connect((err, client, release) => {
+    if (err) throw err;
+    client.query(queryStr, (error, res) => {
+      release();
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, res);
+      }
+    });
+  });
 };
 
 const deleteProduct = (params, callback) => {
   const queryStr = `DELETE FROM products WHERE id = ${params.id}'`;
-  client.query(queryStr)
-    .then(result => callback(null, result))
-    .catch(error => callback(error));
+  pool.connect((err, client, release) => {
+    if (err) throw err;
+    client.query(queryStr, (error, res) => {
+      release();
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, res);
+      }
+    });
+  });
 };
 
 module.exports = {

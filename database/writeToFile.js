@@ -1,23 +1,23 @@
 const fs = require('fs');
 const fake = require('faker');
 
-const wStream = fs.createWriteStream('DOC_countries.txt');
+const wStream = fs.createWriteStream('randomNum.csv');
 
 
 const writeToFile = (writer) => {
-  let i = 16;
+  let i = 1000000;
   function write() {
     let ok = true;
     do {
       i -= 1;
       if (i === 0) {
-        writer.write(`'${fake.address.country()}', ${fake.random.number(5)}\n`);
+        writer.write(`${fake.random.number({ min: 1, max: 8000000 })}, ${fake.random.number({ min: 8000000, max: 10000000 })}\n`);
         wStream.end();
       } else {
         if (i % 100000 === 0) {
           console.log(i);
         }
-        ok = writer.write(`'${fake.address.country()}', ${fake.random.number(5)}\n`);
+        ok = writer.write(`${fake.random.number({ min: 1, max: 8000000 })}, ${fake.random.number({ min: 8000000, max: 10000000 })}\n`);
       }
     } while (i > 0 && ok);
     if (i > 0) {
@@ -25,7 +25,7 @@ const writeToFile = (writer) => {
     }
   }
   write();
-}
+};
 
 writeToFile(wStream);
 

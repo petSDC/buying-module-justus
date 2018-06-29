@@ -1,17 +1,24 @@
 config:
-  target: 'http://localhost:8000'
+  target: 'http://localhost:8001'
   processor: "./randomNumber.js"
   phases:
-    - duration: 60
-      arrivalRate: 100
-    - duration: 120
-      arrivalRate: 100
-      rampTo: 300
-    - duration: 300
-      arrivalRate: 300
-      rampTo: 400
-    - duration: 300
-      arrivalRate: 400
+    - duration: 200
+      arrivalRate: 1
+    - duration: 200
+      arrivalRate: 3
+    - duration: 200
+      arrivalRate: 5
+    - duration: 200
+      arrivalRate: 7
+    - duration: 200
+      arrivalRate: 9
+    - duration: 200
+      arrivalRate: 11
+    - duration: 200
+      arrivalRate: 13
+    - duration: 100
+      arrivalRate: 1
+      rampTo: 1
 
   defaults:
     headers:
@@ -20,13 +27,17 @@ scenarios:
   - name: 'top 20%'
     weight: 80
     flow:
-      - function: "generateRandomData"
-      - get:
-          url: "/{{ randomNumber20 }}/details"
+      - loop:
+        - function: "generateRandomData"
+        - get:
+            url: "/{{ randomNumber20 }}/details"
+        count: 100
   - name: 'bottom 80%'
     weight: 20
     flow:
-      - function: "generateRandomData"
-      - get:
-          url: "/{{ randomNumber80 }}/details"
+      - loop:
+        - function: "generateRandomData"
+        - get:
+            url: "/{{ randomNumber80 }}/details"
+        count: 100
 

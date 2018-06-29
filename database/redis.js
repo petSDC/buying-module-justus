@@ -11,41 +11,22 @@ client.on('connect', (err) => {
 });
 
 const storeProduct = (key, data, callback) => {
-  client.set(key, JSON.stringify(data), (err, reply) => {
-    if (err) {
-      console.error('failed to store data redis', err);
-      callback(err, null);
-    } else {
-      console.log('stored product redis', reply);
-      callback(null, data);
-    }
+  client.set(key, JSON.stringify(data), 'EX', 300, () => {
+    callback(data);
   });
 };
 
 const getProduct = (key, callback) => {
   client.get(key, (err, reply) => {
     if (err) {
-      console.error('failed to get data redis', err);
       callback(err, null);
     } else {
-      console.log('got data from redis');
       callback(null, JSON.parse(reply));
     }
   });
 };
 
-const checkRedis = (key, callback) => {
-  client.exists(key, (err, reply) => {
-    if (err) {
-      console.error('failed to check redis', err);
-    } else {
-      callback(reply);
-    }
-  });
-};
-
 module.exports = {
-  checkRedis,
   storeProduct,
   getProduct,
 };

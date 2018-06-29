@@ -1,5 +1,4 @@
 version: '3'
-
 services:
   buying:
     image: justuskw/petsdc-swarm:test
@@ -14,7 +13,7 @@ services:
       restart_policy:
         condition: on-failure
     ports:
-      - '8000:8000'
+      - 's8000:8000'
     networks:
       - webnet
 
@@ -24,9 +23,9 @@ services:
       POSTGRES_USER: 'justuskovats-wildenradt'
       POSTGRES_PASSWORD: ''
       POSTGRES_DB: 'petsdc_buying'
-      PORT: 5432
+      PORT: '5432'
     volumes:
-      - ../data:/data
+      - '/Users/justuskovats-wildenradt/hack-reactor/sdc/data:/data1'
     deploy:
       restart_policy:
         condition: on-failure
