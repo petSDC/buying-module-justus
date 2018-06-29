@@ -134,18 +134,6 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 /***/ }),
 
-/***/ "./client/index.jsx":
-/*!**************************!*\
-  !*** ./client/index.jsx ***!
-  \**************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\n\nvar _react = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _reactDom = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n\nvar _reactDom2 = _interopRequireDefault(_reactDom);\n\nvar _BuyingModule = __webpack_require__(/*! ./components/BuyingModule */ \"./client/components/BuyingModule.jsx\");\n\nvar _BuyingModule2 = _interopRequireDefault(_BuyingModule);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n_reactDom2.default.render(_react2.default.createElement(_BuyingModule2.default, null), document.getElementById('buying-module'));//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9jbGllbnQvaW5kZXguanN4LmpzIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vL2NsaWVudC9pbmRleC5qc3g/MDU5YSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnO1xuaW1wb3J0IFJlYWN0RE9NIGZyb20gJ3JlYWN0LWRvbSc7XG5pbXBvcnQgQnV5aW5nTW9kdWxlIGZyb20gJy4vY29tcG9uZW50cy9CdXlpbmdNb2R1bGUnO1xuXG5SZWFjdERPTS5yZW5kZXIoPEJ1eWluZ01vZHVsZSAvPiwgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2J1eWluZy1tb2R1bGUnKSk7XG4iXSwibWFwcGluZ3MiOiI7O0FBQUE7QUFDQTs7O0FBQUE7QUFDQTs7O0FBQUE7QUFDQTs7Ozs7QUFDQSIsInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./client/index.jsx\n");
-
-/***/ }),
-
 /***/ "./client/styles.css":
 /*!***************************!*\
   !*** ./client/styles.css ***!
@@ -884,13 +872,13 @@ eval("\n\nif (false) {} else {\n  module.exports = __webpack_require__(/*! ./cjs
 /***/ }),
 
 /***/ 0:
-/*!********************************!*\
-  !*** multi ./client/index.jsx ***!
-  \********************************/
+/*!**************************************************!*\
+  !*** multi ./client/components/BuyingModule.jsx ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/client/index.jsx */"./client/index.jsx");
+module.exports = __webpack_require__(/*! /Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/client/components/BuyingModule.jsx */"./client/components/BuyingModule.jsx");
 
 
 /***/ })

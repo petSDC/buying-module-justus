@@ -13,7 +13,7 @@ services:
       restart_policy:
         condition: on-failure
     ports:
-      - 's8000:8000'
+      - '8000:8000'
     networks:
       - webnet
 

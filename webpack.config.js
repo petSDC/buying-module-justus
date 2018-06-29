@@ -6,7 +6,7 @@ module.exports = {
     path.resolve(__dirname, './client/index.jsx')
   ],
   output: {
-    filename: 'buyingBundle.js',
+    filename: 'buying.js',
     path: path.resolve(__dirname, './public/dist'),
   },
   module: {
@@ -24,6 +24,9 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.css'],
   },
   plugins: [
     new MiniCssExtractPlugin({
