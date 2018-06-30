@@ -105,8 +105,9 @@ const insertData = (callback, counter) => {
     .catch(error => callback(error, null));
 };
 
-const addFeedback = (params, callback) => {
-  const queryStr = `INSERT INTO feedback (product_id) VALUES (${params})`;
+const addProduct = (params, callback) => {
+  console.log(params)
+  const queryStr = `INSERT INTO products (product_name, option_name, differentOptions, quantity) VALUES ('${params.product_name}', ${params.option_name}, ${params.free_shipping}, ${params.quantity})`;
   pool.connect((err, client, release) => {
     if (err) throw err;
     client.query(queryStr, (error, res) => {
@@ -155,5 +156,5 @@ module.exports = {
   insertData,
   updateQuantity,
   deleteProduct,
-  addFeedback,
+  addProduct,
 };

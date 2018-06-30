@@ -7,20 +7,6 @@ spec:
     - port: 5432
   selector:
     app: postgres
-  type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-pv-claim
-  labels:
-    app: postgres
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 20Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -48,17 +34,28 @@ spec:
             secretKeyRef:
               name: postgres-pass
               key: password
-        - name: PGDATA
-          value: /Users/justuskovats-wildenradt/hack-reactor/sdc/data
+        # - name: PGDATA
+        #   value: /Users/justuskovats-wildenradt/hack-reactor/sdc/data
         - name: POSTGRES_USER
           value: postgres
         ports:
         - containerPort: 5432
           name: postgres
         volumeMounts:
-        - name: postgres-persistent-storage
-          mountPath: /var/lib/postgres
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/db-data
       volumes:
       - name: postgres-persistent-storage
         persistentVolumeClaim:
           claimName: postgres-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi

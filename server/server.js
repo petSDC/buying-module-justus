@@ -1,11 +1,15 @@
 require('newrelic');
 const express = require('express');
+const bodyParser = require('body-parser');
 const db = require('../database/postgreSQL');
 const redis = require('../database/redis');
 const path = require('path');
 
 const app = express();
 const port = process.env.port || 8001;
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -19,8 +23,8 @@ app.listen(port, () => console.log(`Buying module listening on port ${port}!`));
 app.get('/:id/details', (req, res) => {
   redis.getProduct(req.params.id, (err, data) => {
     if (data) {
-      // console.log('got data from redis');
-      res.json(data);
+      console.log('got data from redis');
+      res.send(data);
     } else {
       // console.log('going to postgres');
       db.retrieve(req.params.id, (errors, result) => {
@@ -28,7 +32,8 @@ app.get('/:id/details', (req, res) => {
           res.sendStatus(500);
         } else {
           redis.storeProduct(req.params.id, result, (results) => {
-            res.json(results);
+            console.log(results)
+            res.send(results);
           });
         }
       });
@@ -46,31 +51,17 @@ app.post('/:id/details', (req, res) => {
   });
 });
 
-app.post('/:id/addFeedback', (req, res) => {
-  db.addFeedback(req.params.id, (err) => {
+app.post('/:id/addProduct', (req, res) => {
+  db.addProduct(req.body, (err) => {
     if (err) {
-      console.error(err);
+      res.sendStatus(500);
     } else {
-      res.send('feedback added');
-    }
-  });
-});
-
-app.post('/:id/users', (req, res) => {
-  db.updateCart((err) => {
-    if (err) {
-      console.error(err);
-    } else {
-      res.send('updated user cart');
+      res.send('product added');
     }
   });
 });
 
 app.put('/:id/details', (req, res) => {
-  const params = {
-    id: req.params.id,
-    quantity: 10,
-  };
   db.updateQuantity(params, (err) => {
     if (err) {
       res.sendStatus(500);
