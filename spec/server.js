@@ -1,43 +1,14 @@
 const { Pool } = require('pg');
 const axios = require('axios');
 const expect = require('chai').expect;
+const postgres = require('../database/postgreSQL');
+const redis = require('../database/redis');
 
-describe('Postgres database', () => {
-  var pool;
-
-  beforeEach((done) => {
-    pool = new Pool({
-      host: 'localhost',
-      max: 200,
-      database: 'petsdc_buying',
-      password: '',
-      port: 5432,
-    });
-    
-    pool.connect((err) => {
-      if (err) {
-        console.error('failed to connect to postgres');
-      } else {
-        console.log('connected to postgres');
-      }
-    });
-    done();
-
-
-    // var tablename = 'messages';
-    
-    /* Empty the db table before each test so that multiple tests
-     * (or repeated runs of the tests) won't screw each other up: */
-    // pool.query('truncate ' + tablename, done);
-  });
-
-  afterEach(() => {
-    pool.end();
-  });
+describe('Express server', () => {
 
   it('Should insert from the database', (done) => {
     const product = {
-      id: 10001000,
+      id: 100100000,
       product_name:"Justus is cool",
       option_name: 'test option name',
       different_options: ["4x6 inches", "5x7 inches", "8x10 inches", "11x14 inches", "12x16 inches", "13x19 inches", "16x20 inches", "A4", "A3", "A2"],
@@ -59,11 +30,10 @@ describe('Postgres database', () => {
     }
     axios.post('/:id/addProduct', product)
     .then((res) => {
-      const selectQuery = `SELECT * from products where id=10001000'`;
+      const selectQuery = `SELECT * from products where id=100100000'`;
       pool.query(selectQuery)
       .then((res) => {
-        console.log('///////////', res.data.rows[0])
-        expect(res.data.rows[0].product_name).to.equal('Justus is cool');
+        expect(res.status).to.equal(200);
       })
       .catch(error => console.error(error))
     })
@@ -72,52 +42,110 @@ describe('Postgres database', () => {
 });
 
   it('Should select a product from the database', (done) => {
-    axios.get(`/${10001000}/details`)
+    axios.get(`/${100100000}/details`)
       .then((res) => {
-        expect(res.data.rows[0].product_name).to.equal('Justus is cool');
+        expect(res.status).to.equal(200);
       })
       .catch(error => console.error(error));
       done();
   });
 
   it('Should update a product from the database', (done) => {
-    axios.put(`/${10001000}/details`)
+    axios.put(`/${100100000}/details`, {quantity: 2})
       .then((res) => {
-        
+        expect(res.status).to.equal(200);
       })
+      .catch(error => console.error(error));
+      done();
   });
-// var queryString = 'SELECT * FROM messages';
-// var queryArgs = [];
 
-// pool.query(queryString, queryArgs, function(err, results) {
-//   // Should have one result:
-//   expect(results.length).to.equal(1);
+  it('Should delete a product from the database', (done) => {
+    axios.delete(`/${100100000}/details`)
+      .then((res) => {
+        expect(res.status).to.equal(200);
+      })
+      .catch(error => console.error(error));
+      done();
+  });
+});
 
-//   // TODO: If you don't have a column named text, change this test.
-//   expect(results[0].text).to.equal('In mercy\'s name, three days is all I need.');
+describe('Postgres database', () => {
 
-//   done();
+  it('Should insert a product to the postgres database', (done) => {
+    const product = {
+      id: 100100000,
+      product_name:"Justus is very cool",
+      option_name: 'test option name',
+      different_options: ["4x6 inches", "5x7 inches", "8x10 inches", "11x14 inches", "12x16 inches", "13x19 inches", "16x20 inches", "A4", "A3", "A2"],
+      price: [83.4,175.44,106.63,195.38,93.44,14.46,78.08,181.18,167.61,160.81],
+      freeShipping: true,
+      quantity: 10,
+      handmade: false,
+      made_to_order: false,
+      materials: "charcoal",
+      gift_message: true,
+      gift_card: false,
+      shipping_countries: ["Australia", "Bulgaria", "Canada", "Denmark", "Finland", "Germany", "Iceland", "Ireland", "Liechtenstein", "Luxembourg", "Monaco", "New Zealand", "Norway", "Sweden", "Switzerland", "United Kingdom", "United States"],
+      shippingPrice: [3.43, 5.52, 8.60, 0, 2.14, 1.39, 8.64, 0, 5.41, 0.64, 3.27, 1.52, 0, 0, 2.09, 0, 0],
+      feedback: 371,
+      favorited_by: 196,
+      shipping_min: 3,
+      shipping_max: 5,
+      shop_location: "Armenia"
+    };
+    postgres.addProduct(product, () => {
+      axios.get('/100100000/details')
+        .then((res) => {
+          expect(res.data.rows[0].product_name).to.equal('Justus is very cool');
+        })
+        .catch(error => console.error(error));
+    });
+    done();
+  });
 
-  // it('Should output all messages from the DB', function(done) {
-  //   // Let's insert a message into the db
+  it('Should select a product from the database', (done) => {
+    postgres.retrieve(100100000, (err, res) => {
+      expect(res.data.rows[0].product_name).to.equal('Justus is very cool');
+    })
+    done();
+  });
 
-  //   var queryString = 'INSERT INTO messages(text, userid, roomname) VALUES (?, ?, ?)';
-  //   var queryArgs = ['Men like you can never change!', 1, 'main'];
-  //       // TODO - The exact query string and query args to use
-  //   // here depend on the schema you design, so I'll leave
-  //   // them up to you. */
+  it('Should update a product from the database', (done) => {
+    postgres.updateQuantity({ quantity: 10, id: 100100000 }, (err, res) => {
+      axios.get('/100100000/details')
+        .then((res) => {
+          expect(res.data.rows[0].quantity).to.equal(9);
+        })
+        .catch(error => console.error(error));
+    });
+    done();
+  });
 
-  //   pool.query(queryString, queryArgs, function(err) {
-  //     if (err) { throw err; }
+  it('Should delete a product from the database', (done) => {
+    postgres.deleteProduct({ id: 100100000 }, (err, res) => {
+      axios.get('/100100000/details')
+          .then((res) => {
+            expect(res.data.rows[0]).to.equal(undefined);
+          })
+          .catch(error => console.error(error));
+    })  
+    done();
+  });
+});
 
-  //     // Now query the Node chat server and see if it returns
-  //     // the message we just inserted:
-  //     request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
-  //       var messageLog = JSON.parse(body);
-  //       expect(messageLog[0].text).to.equal('Men like you can never change!');
-  //       expect(messageLog[0].roomname).to.equal('main');
-  //       done();
-  //     });
-  //   });
-  // });
+describe('Redis database', () => {
+  it('Should store a product in redis', (done) => {
+    redis.storeProduct(100100000, 'Hello', () => {
+      redis.getProduct(100100000, (err, res) => {
+        expect(res).to.equal('Hello');
+      });
+    });
+    done();
+  });
+  it('Should get a product from the redis', (done) => {
+    redis.getProduct(100100000, (err, res) => {
+      expect(res).to.equal('Hello');
+    });
+    done();
+  });
 });

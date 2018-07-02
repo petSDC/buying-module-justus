@@ -1,5 +1,6 @@
 const fake = require('faker');
 const { Pool } = require('pg');
+const { Client } = require('pg');
 // const knex = require('knex')({
 //   client: 'pg',
 //   connection: {
@@ -11,18 +12,19 @@ const { Pool } = require('pg');
 //   },
 // });
 
+// const pool = new Client('postgresql://database:5432');
+
 const pool = new Pool({
-  host: 'localhost',
-  user: 'justuskovats-wildenradt',
-  max: 300,
-  database: 'petsdc_buying',
+  host: 'database',
+  user: 'postgres',
   password: '',
+  database: 'petsdc_buying',
   port: 5432,
 });
 
 pool.connect((err) => {
   if (err) {
-    console.error('failed to connect to postgres');
+    console.error('failed to connect to postgres', err);
   } else {
     console.log('connected to postgres');
   }
@@ -106,7 +108,6 @@ const insertData = (callback, counter) => {
 };
 
 const addProduct = (params, callback) => {
-  console.log(params)
   const queryStr = `INSERT INTO products (product_name, option_name, differentOptions, quantity) VALUES ('${params.product_name}', ${params.option_name}, ${params.free_shipping}, ${params.quantity})`;
   pool.connect((err, client, release) => {
     if (err) throw err;

@@ -44,18 +44,12 @@ CREATE TABLE IF NOT EXISTS countries_shipping (
   country_id integer
 );
 
-copy products (product_name, free_shipping, option_name, different_options, price, quantity, handmade, made_to_order, materials, gift_message, gift_card, shipping_min_days, shipping_max_days, shipping_price) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/DOC_products.txt' (delimiter(','));
-copy feedback (product_id) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/DOC_feedback.txt' (delimiter(','));
-copy users (products_favorited) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/DOC_users.txt' (delimiter(','));
-copy favorited_by_users (user_id, product_id) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/DOC_favorited_by_users.txt' (delimiter(','));
-copy countries_shipping (product_id, country_id) from '/Users/justuskovats-wildenradt/hack-reactor/sdc/buying-module-justus/DOC_countries_shipping.txt' (delimiter(','));
-
--- copy products (product_name, free_shipping, option_name, different_options, price, quantity, handmade, made_to_order, materials, gift_message, gift_card, shipping_min_days, shipping_max_days, shipping_price) from '/products' (delimiter(','));
--- copy feedback (product_id) from '/feedback' (delimiter(','));
--- copy users (products_favorited) from '/users' (delimiter(','));
--- copy favorited_by_users (user_id, product_id) from '/favorited' (delimiter(','));
--- copy countries (country_name, shipping_multiplier) from '/countries' (delimiter(','));
--- copy countries_shipping (product_id, country_id) from '/shipping' (delimiter(','));
+\copy products (product_name, free_shipping, option_name, different_options, price, quantity, handmade, made_to_order, materials, gift_message, gift_card, shipping_min_days, shipping_max_days, shipping_price) from '../data/DOC_products.txt' (delimiter(','));
+\copy feedback (product_id) from '/data/DOC_feedback.txt' (delimiter(','));
+\copy users (products_favorited) from '/data/DOC_users.txt' (delimiter(','));
+\copy favorited_by_users (user_id, product_id) from '/data/DOC_favorited_by_users.txt' (delimiter(','));
+\copy countries (country_name, shipping_multiplier) from '/data/DOC_countries.txt' (delimiter(','));
+\copy countries_shipping (product_id, country_id) from '/data/DOC_countries_shiping.txt' (delimiter(','));
 
 
 ALTER TABLE feedback 

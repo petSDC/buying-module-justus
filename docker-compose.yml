@@ -1,9 +1,10 @@
 version: '3'
 services:
   buying:
-    image: justuskw/petsdc-swarm:test
+    image: justuskw/buying-petsdc:v31
     depends_on:
       - 'database'
+      - 'redis'
     deploy:
       replicas: 1
       resources:
@@ -14,22 +15,35 @@ services:
         condition: on-failure
     ports:
       - '8000:8000'
+    # environment:
+    #   DATABASE_URL: postgres://postgres:password@database:5432/petsdc_buying    
     networks:
       - webnet
-
+ 
   database:
-    image: postgres:10.4
+    image: postgres
     environment:
-      POSTGRES_USER: 'justuskovats-wildenradt'
+      POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: ''
       POSTGRES_DB: 'petsdc_buying'
       PORT: '5432'
     volumes:
-      - '/Users/justuskovats-wildenradt/hack-reactor/sdc/data:/data1'
+      # - './data:/data'
+      - './dockerSchema.sql:/dockerSchema.sql'
+    networks:
+      - webnet
     deploy:
       restart_policy:
         condition: on-failure
       placement:
         constraints: [node.role == manager]
+  redis:
+    image: redis
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    command: redis-server --appendonly yes
+    networks:
+      - webnet
 networks:
   webnet:
