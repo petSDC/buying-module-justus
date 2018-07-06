@@ -35,7 +35,3 @@ CREATE TABLE IF NOT EXISTS addToCart (
   price int,
   shppingCost set<int>,
 );
-
-
--- INSERT INTO petsdc_buying.products (id, name, freeShipping, optionsName, differentOptions, price, quantity, handmade, madeToOrder, materials, giftMessage, giftCard, shippingCountries, shippingPrice, feedback, favoritedBy, shippingMin, shippingMax)
---              values (100000010, 'justus', true, 'justu', ['a'], [3.43], 10, true, true, true, true, true, ['sdf], [45.3], 455, 453,2,9);
