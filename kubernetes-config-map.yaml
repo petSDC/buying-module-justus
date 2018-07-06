@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: example-config
-data:
-  EXAMPLE_DB_HOST: postgres://postgres@postgres/example?sslmode=disable
-  EXAMPLE_DB_KIND: postgres
-  PGDATA: /Users/justuskovats-wildenradt/hack-reactor/sdc/data
-  POSTGRES_USER: postgres

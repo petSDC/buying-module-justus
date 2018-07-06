@@ -1,25 +1,14 @@
 const fake = require('faker');
 const { Pool } = require('pg');
-const { Client } = require('pg');
-// const knex = require('knex')({
-//   client: 'pg',
-//   connection: {
-//     host: 'localhost',
-//     // user: 'justuskovats-wildenradt',
-//     password: '',
-//     database: 'petsdc_buying',
-//     port: 5432,
-//   },
-// });
-
-// const pool = new Client('postgresql://database:5432');
+const knex = require('knex');
 
 const pool = new Pool({
-  host: 'database',
+  host: '18.217.132.82',
   user: 'postgres',
   password: '',
   database: 'petsdc_buying',
   port: 5432,
+  max: 50,
 });
 
 pool.connect((err) => {
@@ -36,25 +25,7 @@ const retrieve = (params, callback) => {
     `SELECT
       countries.country_name,
       countries.shipping_multiplier,
-      products.*,
-      (
-        SELECT
-          count(product_id)
-        FROM
-          feedback
-        WHERE
-          feedback.product_id = ${params}
-      ) AS feedbackCount,
-      (
-        SELECT
-          count(users.products_favorited)
-        FROM
-          products
-          LEFT JOIN favorited_by_users ON products.id = favorited_by_users.product_id
-          LEFT JOIN users ON favorited_by_users.user_id = users.id
-        WHERE
-          products.id = ${params}
-      ) AS usersCount
+      products.*
     FROM
       products
       LEFT JOIN countries_shipping on products.id = countries_shipping.product_id
@@ -62,15 +33,18 @@ const retrieve = (params, callback) => {
     WHERE
       products.id = ${params}`;
   pool.connect((err, client, release) => {
-    if (err) throw err;
-    client.query(queryStr, (error, res) => {
-      release();
-      if (error) {
-        callback(error, null);
-      } else {
-        callback(null, res);
-      }
-    });
+    if (err) {
+      console.error(err);
+    } else {
+      pool.query(queryStr, (error, res) => {
+        release();
+        if (error) {
+          callback(error, null);
+        } else {
+          callback(null, res);
+        }
+      });
+    }
   });
 };
 

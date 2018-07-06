@@ -39,7 +39,6 @@ class BuyingModule extends React.Component {
   }
 
   componentDidMount() {
-    console.log('test', `${window.location.pathname}details`)
     axios.get(`${window.location.pathname}details`)
       .then((response) => {
         console.log('response', response)

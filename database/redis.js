@@ -1,8 +1,6 @@
 const redis = require('redis');
 
-const host = process.env.REDIS_PORT_6379_TCP_ADDR || 'redis';
-const port = process.env.REDIS_PORT_6379_TCP_PORT || 6379;
-const client = redis.createClient(port, host);
+const client = redis.createClient(6379, '52.15.217.249');
 
 client.on('connect', (err) => {
   if (err) {
@@ -13,8 +11,12 @@ client.on('connect', (err) => {
 });
 
 const storeProduct = (key, data, callback) => {
-  client.set(key, JSON.stringify(data), 'EX', 400, () => {
-    callback(data);
+  client.set(key, JSON.stringify(data), 'EX', 400, (err) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
   });
 };
 

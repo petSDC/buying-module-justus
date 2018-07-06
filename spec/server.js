@@ -1,18 +1,16 @@
-const { Pool } = require('pg');
 const axios = require('axios');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const postgres = require('../database/postgreSQL');
 const redis = require('../database/redis');
 
 describe('Express server', () => {
-
   it('Should insert from the database', (done) => {
     const product = {
       id: 100100000,
       product_name:"Justus is cool",
       option_name: 'test option name',
       different_options: ["4x6 inches", "5x7 inches", "8x10 inches", "11x14 inches", "12x16 inches", "13x19 inches", "16x20 inches", "A4", "A3", "A2"],
-      price: [83.4,175.44,106.63,195.38,93.44,14.46,78.08,181.18,167.61,160.81],
+      price: [83.4, 175.44, 106.63, 195.38, 93.44, 14.46, 78.08, 181.18, 167.61, 160.81],
       freeShipping: true,
       quantity: 10,
       handmade: false,
@@ -26,20 +24,19 @@ describe('Express server', () => {
       favorited_by: 196,
       shipping_min: 3,
       shipping_max: 5,
-      shop_location: "Armenia"
-    }
+      shop_location: "Armenia",
+    };
     axios.post('/:id/addProduct', product)
-    .then((res) => {
-      const selectQuery = `SELECT * from products where id=100100000'`;
-      pool.query(selectQuery)
-      .then((res) => {
-        expect(res.status).to.equal(200);
+      .then(() => {
+        axios.get(`/${100100000}/details`)
+          .then((res) => {
+            expect(res.status).to.equal(200);
+          })
+          .catch(error => console.error(error));
       })
-      .catch(error => console.error(error))
-    })
-    .catch(error => console.error(error));
+      .catch(error => console.error(error));
     done();
-});
+  });
 
   it('Should select a product from the database', (done) => {
     axios.get(`/${100100000}/details`)
@@ -47,16 +44,16 @@ describe('Express server', () => {
         expect(res.status).to.equal(200);
       })
       .catch(error => console.error(error));
-      done();
+    done();
   });
 
   it('Should update a product from the database', (done) => {
-    axios.put(`/${100100000}/details`, {quantity: 2})
+    axios.put(`/${100100000}/details`, { quantity: 2 })
       .then((res) => {
         expect(res.status).to.equal(200);
       })
       .catch(error => console.error(error));
-      done();
+    done();
   });
 
   it('Should delete a product from the database', (done) => {
@@ -65,19 +62,18 @@ describe('Express server', () => {
         expect(res.status).to.equal(200);
       })
       .catch(error => console.error(error));
-      done();
+    done();
   });
 });
 
 describe('Postgres database', () => {
-
   it('Should insert a product to the postgres database', (done) => {
     const product = {
       id: 100100000,
       product_name:"Justus is very cool",
       option_name: 'test option name',
       different_options: ["4x6 inches", "5x7 inches", "8x10 inches", "11x14 inches", "12x16 inches", "13x19 inches", "16x20 inches", "A4", "A3", "A2"],
-      price: [83.4,175.44,106.63,195.38,93.44,14.46,78.08,181.18,167.61,160.81],
+      price: [83.4, 175.44, 106.63, 195.38, 93.44, 14.46, 78.08, 181.18, 167.61, 160.81],
       freeShipping: true,
       quantity: 10,
       handmade: false,
@@ -91,7 +87,7 @@ describe('Postgres database', () => {
       favorited_by: 196,
       shipping_min: 3,
       shipping_max: 5,
-      shop_location: "Armenia"
+      shop_location: "Armenia",
     };
     postgres.addProduct(product, () => {
       axios.get('/100100000/details')
@@ -106,15 +102,15 @@ describe('Postgres database', () => {
   it('Should select a product from the database', (done) => {
     postgres.retrieve(100100000, (err, res) => {
       expect(res.data.rows[0].product_name).to.equal('Justus is very cool');
-    })
+    });
     done();
   });
 
   it('Should update a product from the database', (done) => {
-    postgres.updateQuantity({ quantity: 10, id: 100100000 }, (err, res) => {
+    postgres.updateQuantity({ quantity: 10, id: 100100000 }, () => {
       axios.get('/100100000/details')
-        .then((res) => {
-          expect(res.data.rows[0].quantity).to.equal(9);
+        .then((response) => {
+          expect(response.data.rows[0].quantity).to.equal(9);
         })
         .catch(error => console.error(error));
     });
@@ -122,13 +118,13 @@ describe('Postgres database', () => {
   });
 
   it('Should delete a product from the database', (done) => {
-    postgres.deleteProduct({ id: 100100000 }, (err, res) => {
+    postgres.deleteProduct({ id: 100100000 }, () => {
       axios.get('/100100000/details')
-          .then((res) => {
-            expect(res.data.rows[0]).to.equal(undefined);
-          })
-          .catch(error => console.error(error));
-    })  
+        .then((res) => {
+          expect(res.data.rows[0]).to.equal(undefined);
+        })
+        .catch(error => console.error(error));
+    });
     done();
   });
 });

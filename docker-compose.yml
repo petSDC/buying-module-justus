@@ -1,7 +1,7 @@
 version: '3'
 services:
   buying:
-    image: justuskw/buying-petsdc:v31
+    image: justuskw/buying-petsdc:last1
     depends_on:
       - 'database'
       - 'redis'
@@ -15,10 +15,8 @@ services:
         condition: on-failure
     ports:
       - '8000:8000'
-    # environment:
-    #   DATABASE_URL: postgres://postgres:password@database:5432/petsdc_buying    
     networks:
-      - webnet
+      - default
  
   database:
     image: postgres
@@ -27,11 +25,8 @@ services:
       POSTGRES_PASSWORD: ''
       POSTGRES_DB: 'petsdc_buying'
       PORT: '5432'
-    volumes:
-      # - './data:/data'
-      - './dockerSchema.sql:/dockerSchema.sql'
     networks:
-      - webnet
+      - default
     deploy:
       restart_policy:
         condition: on-failure
@@ -44,6 +39,4 @@ services:
         constraints: [node.role == manager]
     command: redis-server --appendonly yes
     networks:
-      - webnet
-networks:
-  webnet:
+      - default
